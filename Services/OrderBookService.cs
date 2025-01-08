@@ -2,9 +2,6 @@
 using Interfaces.Integrations;
 using Interfaces.Repositories;
 using Interfaces.Services;
-using OrderBookEM = Repositories.Models.OrderBook;
-using OrderEM = Repositories.Models.Order;
-using OrderType = Repositories.Models.OrderType;
 
 namespace Services
 {
@@ -23,31 +20,7 @@ namespace Services
         {
             var orderBook = await _orderBookProvider.GetAsync(cancellationToken);
 
-            var orderEnities = orderBook.Asks
-                .Select(x => 
-                    new OrderEM
-                    {
-                        Amount = x.Amount,
-                        Price = x.Price,
-                        Type = OrderType.Ask,
-                    })
-                .Concat(
-                    orderBook.Bids.Select(x =>
-                        new OrderEM
-                        {
-                            Amount = x.Amount,
-                            Price = x.Price,
-                            Type = OrderType.Ask,
-                        })
-                    ).ToList();
-
-            var entity = new OrderBookEM
-            {
-                Timestamp = orderBook.Timestamp,
-                Orders = orderEnities,
-            };
-
-            await _orderBookRepository.SaveAsync(entity, cancellationToken);
+            await _orderBookRepository.SaveAsync(orderBook, cancellationToken);
 
             return orderBook;
         }

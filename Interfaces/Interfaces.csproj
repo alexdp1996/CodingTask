@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DTOs\DTOs.csproj" />
-    <ProjectReference Include="..\Repositories.Models\Repositories.Models.csproj" />
   </ItemGroup>
 
 </Project>

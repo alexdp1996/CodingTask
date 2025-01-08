@@ -1,4 +1,4 @@
-﻿using Repositories.Models;
+﻿using DTOs;
 
 namespace Interfaces.Repositories
 {

@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{2CD207DF-B35B-4C5C-A959-59D039EC2DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories.Models", "Repositories.Models\Repositories.Models.csproj", "{8F3154C9-50D0-42FD-ACF2-50AEA36DC1DC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOs", "DTOs\DTOs.csproj", "{E61D8069-53ED-4556-9507-D0CD9A294023}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integrations", "Integrations\Integrations.csproj", "{803627DA-90E0-41C0-BA02-4F75922F537D}"
@@ -41,10 +39,6 @@ Global
 		{2CD207DF-B35B-4C5C-A959-59D039EC2DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD207DF-B35B-4C5C-A959-59D039EC2DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD207DF-B35B-4C5C-A959-59D039EC2DD4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F3154C9-50D0-42FD-ACF2-50AEA36DC1DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F3154C9-50D0-42FD-ACF2-50AEA36DC1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F3154C9-50D0-42FD-ACF2-50AEA36DC1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F3154C9-50D0-42FD-ACF2-50AEA36DC1DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E61D8069-53ED-4556-9507-D0CD9A294023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E61D8069-53ED-4556-9507-D0CD9A294023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E61D8069-53ED-4556-9507-D0CD9A294023}.Release|Any CPU.ActiveCfg = Release|Any CPU
