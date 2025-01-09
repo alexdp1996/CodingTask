@@ -1,6 +1,7 @@
 ﻿using DTOs;
 using Integrations.Api;
 using Interfaces.Integrations;
+using System.Globalization;
 
 namespace Integrations
 {
@@ -21,21 +22,24 @@ namespace Integrations
 
             var asks = content.Asks.Select(x => new Order
             {
-                Price = x[0],
-                Amount = x[1],
+                Price = decimal.Parse(x[0], CultureInfo.InvariantCulture),
+                Amount = decimal.Parse(x[1], CultureInfo.InvariantCulture),
             });
 
             var bids = content.Asks.Select(x => new Order
             {
-                Price = x[0],
-                Amount = x[1],
+                Price = decimal.Parse(x[0], CultureInfo.InvariantCulture),
+                Amount = decimal.Parse(x[1], CultureInfo.InvariantCulture),
             });
+
+            var microTimestamp = long.Parse(content.Microtimestamp);
+            var timeSpan = TimeSpan.FromMicroseconds(microTimestamp);
 
             var orderBook = new OrderBook
             {
-                Timestamp = DateTimeOffset.FromUnixTimeMilliseconds(content.Timestamp),
-                Asks = asks,
-                Bids = bids,
+                Timestamp = DateTimeOffset.UnixEpoch + timeSpan,
+                Asks = asks.ToList(),
+                Bids = bids.ToList(),
             };
 
             return orderBook;
