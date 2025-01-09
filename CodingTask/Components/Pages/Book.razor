@@ -1,0 +1,37 @@
+﻿@page "/book"
+@using DTOs
+@using Interfaces.Services
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
+<PageTitle>Order Book</PageTitle>
+
+@if (OrderBook != null)
+{
+    <OrderBookChart OrderBook=OrderBook></OrderBookChart>
+}
+else
+{
+    <p>Loading order book...</p>
+}
+
+
+@code {
+
+    [Inject]
+    protected IOrderBookService OrderBookService { get; set; } = default!;
+
+    private OrderBook OrderBook = default!;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            OrderBook = await OrderBookService.ReadAndSaveAsync(CancellationToken.None);
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

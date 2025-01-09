@@ -1,0 +1,81 @@
+﻿@using DTOs
+<BarChart @ref="bidsChart" Class="mb-4" />
+<BarChart @ref="asksChart" Class="mb-4" />
+
+@code {
+    private BarChart bidsChart = default!;
+    private BarChart asksChart = default!;
+
+    [Parameter]
+    public OrderBook OrderBook { get; set; } = default!;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await RenderChartAsync();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task RenderChartAsync()
+    {
+        var asksData = new ChartData
+        {
+            Labels = OrderBook.Asks.Select(x => x.Price.ToString()).ToList(),
+            Datasets = new List<IChartDataset>()
+            {
+                new BarChartDataset()
+                {
+                    Label = "Asks",
+                    Data = OrderBook.Asks.Select(x => (double?)x.Amount).ToList(),
+                    BackgroundColor = new List<string>{ "rgb(255, 0, 0)" },
+                    CategoryPercentage = 0.8,
+                    BarPercentage = 1,
+                },
+            }
+        };
+
+        var bidsData = new ChartData
+        {
+            Labels = OrderBook.Bids.Select(x => x.Price.ToString()).ToList(),
+            Datasets = new List<IChartDataset>()
+            {
+                new BarChartDataset()
+                {
+                    Label = "Bids",
+                    Data = OrderBook.Bids.Select(x => (double?)x.Amount).ToList(),
+                    BackgroundColor = new List<string>{ "rgb(0, 255, 0)" },
+                    CategoryPercentage = 0.8,
+                    BarPercentage = 1,
+                },
+            }
+        };
+
+        var asksOptions = GetOptions("Asks");
+        var bidsOptions = GetOptions("Bids");
+
+        await bidsChart.InitializeAsync(asksData, asksOptions);
+        await asksChart.InitializeAsync(bidsData, bidsOptions);
+    }
+
+    private static BarChartOptions GetOptions(string chartTitle)
+    {
+        var options = new BarChartOptions();
+
+        options.Interaction.Mode = InteractionMode.Index;
+
+        options.Plugins.Title!.Text = chartTitle;
+        options.Plugins.Title.Display = true;
+        options.Plugins.Title.Font = new ChartFont { Size = 20 };
+
+        options.Responsive = true;
+
+        options.Scales.X!.Title = new ChartAxesTitle { Text = "Price", Display = true };
+        options.Scales.Y!.Title = new ChartAxesTitle { Text = "Amount", Display = true };
+
+        return options;
+    }
+}
