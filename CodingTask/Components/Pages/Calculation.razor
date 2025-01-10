@@ -7,7 +7,8 @@
 
 <Modal @ref="modal" />
 
-<EditForm Model=@Request OnValidSubmit=@FormSubmitted>
+<EditForm Model="@Request" OnValidSubmit=@FormSubmitted>
+    <DataAnnotationsValidator />
     <label for="btcAmount">Amount (BTC):</label>
     <InputNumber id="btcAmount" @bind-Value="Request.Amount" />
     <ValidationMessage For="@(() => Request.Amount)" />
