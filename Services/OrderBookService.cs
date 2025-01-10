@@ -2,6 +2,7 @@
 using Interfaces.Integrations;
 using Interfaces.Repositories;
 using Interfaces.Services;
+using System.Diagnostics;
 
 namespace Services
 {
@@ -42,36 +43,32 @@ namespace Services
 
             var calculation = new PriceCalculation
             {
-                DesiredBtc = amountToBuy,
-                PriceDetails = new List<Order>(),
+                DesiredAmount = amountToBuy,
+                PriceDetails = new List<CalculationOrder>(),
             };
 
             foreach (var order in orderBook.Bids)
             {
+                var calculationOrder = amountToBuy >= order.Amount
+                    ? new CalculationOrder
+                    {
+                        Amount = order.Amount,
+                        Price = order.Price,
+                    }
+                    : new CalculationOrder
+                    {
+                    Amount = amountToBuy,
+                        Price = order.Price,
+                    };
+
+                calculation.ExpectedAmount += calculationOrder.Amount;
+                calculation.ExpectedPrice += calculationOrder.TotalPrice;
+                amountToBuy -= calculationOrder.Amount;
+
+                calculation.PriceDetails.Add(calculationOrder);
+
                 if (amountToBuy == 0)
                     break;
-
-                if (amountToBuy >= order.Amount)
-                {
-                    calculation.PriceDetails.Add(order);
-
-                    calculation.ExpectedAmount += order.Amount;
-                    calculation.ExpectedPrice += order.Amount * order.Price;
-                    
-                    amountToBuy -= order.Amount;
-
-                    continue;
-                }
-
-                if (amountToBuy < order.Amount)
-                {
-                    calculation.PriceDetails.Add(new Order { Amount = amountToBuy, Price = order.Price });
-                    
-                    calculation.ExpectedAmount += amountToBuy;
-                    calculation.ExpectedPrice += amountToBuy * order.Price;
-
-                    amountToBuy = 0;
-                }
             }
 
             return calculation;
