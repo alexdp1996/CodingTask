@@ -4,6 +4,10 @@
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 
+<PageTitle>Audit</PageTitle>
+
+<Modal @ref="modal" />
+
 <table class="table">
     <thead>
         <tr>
@@ -18,7 +22,7 @@
             {
                 <tr>
                     <td>@item.Timestamp</td>
-                    <td><Button Color="ButtonColor.Primary" @onclick="() => ShowEmployeeComponent(item.Timestamp)">Show chart</Button></td>
+                    <td><Button Color="ButtonColor.Primary" @onclick="() => ShowChart(item.Timestamp)">Show chart</Button></td>
                 </tr>
             }
         }
@@ -28,8 +32,6 @@
         }
     </tbody>
 </table>
-
-<Modal @ref="modal" />
 
 <Pagination ActivePageNumber="@currentPageNumber"
 TotalPages="@pageCount"
@@ -48,13 +50,14 @@ PageChanged="OnPageChangedAsync" />
 
     IEnumerable<OrderBook> OrderBooks = default!;
 
-    private async Task ShowEmployeeComponent(DateTimeOffset timestamp)
+    private async Task ShowChart(DateTimeOffset timestamp)
     {
         var parameters = new Dictionary<string, object>();
 
         var orderBook = await OrderBookService.GetAuditRecordByTimestampAsync(timestamp, CancellationToken.None);
 
         parameters.Add("OrderBook", orderBook);
+
         await modal.ShowAsync<OrderBookChart>(title: "Audit chart", parameters: parameters);
     }
 

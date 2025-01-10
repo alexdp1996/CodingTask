@@ -1,0 +1,67 @@
+﻿@using DTOs
+@using Interfaces.Services
+
+@if (!isLoading)
+{
+    <div class="form-group">
+        <label>Desired BTC:</label>
+        <p>@PriceCalculation.DesiredBtc</p>
+    </div>
+
+    <div class="form-group">
+        <label>Expected Amount (EUR):</label>
+        <p>@PriceCalculation.ExpectedAmount.ToString("C")</p>
+    </div>
+
+    <div class="form-group">
+        <label>Expected Price per BTC (EUR):</label>
+        <p>@PriceCalculation.ExpectedPrice.ToString("C")</p>
+    </div>
+
+    <div>
+        <h4>Price Details</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Amount (BTC)</th>
+                    <th>Price (EUR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in PriceCalculation.PriceDetails)
+                {
+                    <tr>
+                        <td>@order.Amount</td>
+                        <td>@order.Price.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
+else
+{
+    <p>Calculating...</p>
+}
+
+@code {
+    [Parameter]
+    public decimal Amount { get; set; } = default!;
+
+    [Inject]
+    protected IOrderBookService OrderBookService { get; set; } = default!;
+
+    PriceCalculation PriceCalculation = default!;
+
+    bool isLoading = true;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        isLoading = true;
+        PriceCalculation = await OrderBookService.CalculatePriceAsync(Amount, CancellationToken.None);
+        isLoading = false;
+
+        await base.OnParametersSetAsync();
+    }
+}

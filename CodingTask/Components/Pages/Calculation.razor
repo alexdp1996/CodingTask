@@ -1,0 +1,36 @@
+﻿@page "/calculation"
+@using System.ComponentModel.DataAnnotations
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
+<PageTitle>Calculation</PageTitle>
+
+<Modal @ref="modal" />
+
+<EditForm Model=@Request OnValidSubmit=@FormSubmitted>
+    <label for="btcAmount">Amount (BTC):</label>
+    <InputNumber id="btcAmount" @bind-Value="Request.Amount" />
+    <ValidationMessage For="@(() => Request.Amount)" />
+
+	<input type="submit" value="Calculate" class="btn btn-primary"/>
+</EditForm>
+
+@code {
+    private Modal modal = default!;
+
+    public class CalculationRequest
+    {
+        [Range(0.001, 1000, ErrorMessage = "Amount must be between 0.001 and 1000 BTC.")]
+        public decimal Amount { get; set; }
+    }
+
+    CalculationRequest Request = new CalculationRequest();
+
+    async void FormSubmitted()
+    {
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("Amount", Request.Amount);
+
+        await modal.ShowAsync<CalculationDetails>(title: "Details", parameters: parameters);
+    }   
+}

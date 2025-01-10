@@ -1,4 +1,10 @@
 ﻿@using DTOs
+
+<div class="form-group">
+    <label>Timestamp:</label>
+    <p>@OrderBook.Timestamp.ToString()</p>
+</div>
+
 <BarChart @ref="bidsChart" Class="mb-4" />
 <BarChart @ref="asksChart" Class="mb-4" />
 
@@ -18,6 +24,16 @@
         }
 
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (bidsChart != null && asksChart != null)
+        {
+            await RenderChartAsync();
+        }
+
+        await base.OnParametersSetAsync();
     }
 
     private async Task RenderChartAsync()

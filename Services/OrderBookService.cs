@@ -55,7 +55,7 @@ namespace Services
                 {
                     calculation.PriceDetails.Add(order);
 
-                    calculation.ExpectedBtc += order.Amount;
+                    calculation.ExpectedAmount += order.Amount;
                     calculation.ExpectedPrice += order.Amount * order.Price;
                     
                     amountToBuy -= order.Amount;
@@ -67,7 +67,7 @@ namespace Services
                 {
                     calculation.PriceDetails.Add(new Order { Amount = amountToBuy, Price = order.Price });
                     
-                    calculation.ExpectedBtc += amountToBuy;
+                    calculation.ExpectedAmount += amountToBuy;
                     calculation.ExpectedPrice += amountToBuy * order.Price;
 
                     amountToBuy = 0;

@@ -22,7 +22,7 @@ namespace DI
             services.AddScoped<IOrderBookProvider, OrderBookProvider>();
 
             services.AddDbContext<DatabaseContext>((sp, options) =>
-                options.UseNpgsql(settings.ConnectionString));
+                options.UseNpgsql(settings.ConnectionString), ServiceLifetime.Transient);
 
             services.AddRefitClient<IBitstampApi>()
             .ConfigureHttpClient(c =>
