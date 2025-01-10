@@ -24,13 +24,13 @@ namespace Integrations
             {
                 Price = decimal.Parse(x[0], CultureInfo.InvariantCulture),
                 Amount = decimal.Parse(x[1], CultureInfo.InvariantCulture),
-            });
+            }).OrderBy(x => x.Price);
 
             var bids = content.Asks.Select(x => new Order
             {
                 Price = decimal.Parse(x[0], CultureInfo.InvariantCulture),
                 Amount = decimal.Parse(x[1], CultureInfo.InvariantCulture),
-            });
+            }).OrderBy(x => x.Price);
 
             var microTimestamp = long.Parse(content.Microtimestamp);
             var timeSpan = TimeSpan.FromMicroseconds(microTimestamp);

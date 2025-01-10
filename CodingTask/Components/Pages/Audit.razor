@@ -1,0 +1,90 @@
+﻿@page "/audit"
+@using DTOs
+@using Interfaces.Services
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Timestamps</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!isLoading)
+        {
+            foreach (var item in OrderBooks)
+            {
+                <tr>
+                    <td>@item.Timestamp</td>
+                    <td><Button Color="ButtonColor.Primary" @onclick="() => ShowEmployeeComponent(item.Timestamp)">Show chart</Button></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
+    </tbody>
+</table>
+
+<Modal @ref="modal" />
+
+<Pagination ActivePageNumber="@currentPageNumber"
+TotalPages="@pageCount"
+PageChanged="OnPageChangedAsync" />
+
+<PageTitle>Audit</PageTitle>
+@code {
+    [Inject]
+    protected IOrderBookService OrderBookService { get; set; } = default!;
+
+    private Modal modal = default!;
+
+    int currentPageNumber = 1;
+    int pageCount = 0;
+    bool isLoading = true;
+
+    IEnumerable<OrderBook> OrderBooks = default!;
+
+    private async Task ShowEmployeeComponent(DateTimeOffset timestamp)
+    {
+        var parameters = new Dictionary<string, object>();
+
+        var orderBook = await OrderBookService.GetAuditRecordByTimestampAsync(timestamp, CancellationToken.None);
+
+        parameters.Add("OrderBook", orderBook);
+        await modal.ShowAsync<OrderBookChart>(title: "Audit chart", parameters: parameters);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ReadDataAsync(currentPageNumber - 1);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task OnPageChangedAsync(int newPageNumber)
+    {
+        currentPageNumber = newPageNumber;
+        await ReadDataAsync(currentPageNumber - 1);
+    }
+
+    private async Task ReadDataAsync(int pageNumer)
+    {
+        const int perPage = 25;
+        int totalCount;
+        isLoading = true;
+        StateHasChanged();
+
+        (totalCount, OrderBooks) = await OrderBookService.GetAuditRecordsAsync(pageNumer, perPage, CancellationToken.None);
+
+        pageCount = (int)Math.Ceiling((double)totalCount / perPage);
+        isLoading = false;
+        StateHasChanged();
+    }
+}
