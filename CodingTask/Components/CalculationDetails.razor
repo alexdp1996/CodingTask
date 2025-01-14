@@ -5,17 +5,17 @@
 {
     <div class="form-group">
         <label>Desired BTC:</label>
-        <p>@PriceCalculation.DesiredAmount</p>
+        <p>@PriceCalculation.DesiredAmount.ToString("N2")</p>
     </div>
 
     <div class="form-group">
-        <label>Expected Amount (EUR):</label>
-        <p>@PriceCalculation.ExpectedAmount.ToString("C")</p>
+        <label>Expected Amount (BTC):</label>
+        <p>@PriceCalculation.ExpectedAmount.ToString("N2")</p>
     </div>
 
     <div class="form-group">
         <label>Expected Price per BTC (EUR):</label>
-        <p>@PriceCalculation.ExpectedPrice.ToString("C")</p>
+        <p>@PriceCalculation.ExpectedPrice.ToString("N2")</p>
     </div>
 
     <div>
@@ -32,9 +32,9 @@
                 @foreach (var order in PriceCalculation.PriceDetails)
                 {
                     <tr>
-                        <td>@order.Amount</td>
-                        <td>@order.Price.ToString("C")</td>
-                        <td>@order.TotalPrice.ToString("C")</td>
+                        <td>@order.Amount.ToString("N2")</td>
+                        <td>@order.Price.ToString("N2")</td>
+                        <td>@order.TotalPrice.ToString("N2")</td>
                     </tr>
                 }
             </tbody>
